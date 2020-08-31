@@ -75,9 +75,13 @@
 .spiral-container {
   display: inline-flex;
 }
+.mock-data-button {
+  margin-left: 3em;
+  display: flex;
+}
 #small-logo {
-  margin-left: 0.1em;
-  margin-top: 0.1em;
+  margin-left: 0.15em;
+  margin-top: 1.25em;
 }
 
 @keyframes App-logo-spin {
