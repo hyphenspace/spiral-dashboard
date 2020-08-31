@@ -1,23 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import SpiralLogo from "./spiral_logo.svg";
 import BluetoothLogo from "./Bluetooth.svg"
 import {Button, Navbar, Form} from "react-bootstrap"
 import Plot from 'react-plotly.js';
 
-let c = 0;
-
 let bluetoothDevice;
+let c = 0;
 const spiralService = '6e400001-b5a3-f393-e0a9-e50e24dcca9e';
 const spiralRxCharacteristic = '6e400003-b5a3-f393-e0a9-e50e24dcca9e';
 
 
 function App() {
+    const [spiralArray, setArray] = useState([]);
+    const [spiralData, setData] = useState(0);
+    const [isBluetoothOn, setBluetooth] = useState(Boolean);
+    const [count, setCount] = useState([]);
+    
+  useEffect(() => {
+    const timer = setInterval(() => {     
+     if(isBluetoothOn === true) {
+        generateData()   
+    }
 
-      const [spiralData, setData] = useState([])
-      const [bluetoothOn, setBluetooth] = useState(Boolean) 
-      const [mockData, setMockData] = useState([]);
-      const [count, setCount] = useState([]);
+    }, 3000);               // clearing interval
+    return () => clearInterval(timer);
+  });
+
 
         const connectBLE = async () => {
           try {
@@ -46,32 +55,34 @@ function App() {
           for (let i = 0; i < value.byteLength; i++) {
           result += String.fromCharCode(value.getUint8(i));
         }
-          console.log(parseInt(result));
           setData(parseInt(result));
        }
   
-       const disconnectDevice = () => {
 
+       const disconnectDevice = () => {
           if(bluetoothDevice.gatt.connected) {
             bluetoothDevice.gatt.disconnect();
           }
           setBluetooth(false);
        }
      
+
      const generateData = () => {
-        for(let i = mockData.length; i < 10; i++) {
-          const randomNum = [...mockData, Math.random()]
+        for(let i = spiralArray.length; i < 10; i++) {
+          const randomNum = [...spiralArray, spiralData]
           const countNum = [...count, c]
-          setMockData(randomNum)
+          setArray(randomNum)
           setCount(countNum)
         }
+          console.log(spiralArray)
           console.log(count)
           c++;
           count.shift();
-          mockData.shift();
-     }   
+          spiralArray.shift();
+     }  
+    
 
-if(!bluetoothOn) {
+if(!isBluetoothOn) {
   return (
     <div className="App">
       <div className="connect-container"> 
@@ -82,7 +93,7 @@ if(!bluetoothOn) {
           className="d-inline-block align-top"
           alt="Bluetooth logo"
         />
-        <div className="spiral-container"><h2 className="spiral-header-text">spiral </h2> <img id="small-logo" src={SpiralLogo} width="30" width="30" className="d-inline-block align-top" /> </div>
+        <div className="spiral-container"><h2 className="spiral-header-text">spiral </h2> <img id="small-logo" src={SpiralLogo} width="30" height="30" className="d-inline-block align-top" alt="spiral-logo"/> </div>
         <div>
         <p className="spiral-intro-text">To use this app you need a <br/> spiral board flashed with open-tvc.</p>
       </div>
@@ -101,7 +112,7 @@ else {
     <Navbar bg="dark" variant="dark" className="justify-content-between">
      <Navbar.Brand>
        <img
-         alt=""
+         alt="spiral-logo"
          src={SpiralLogo}
          width="30"
          height="30"
@@ -118,15 +129,34 @@ else {
         data={[
           {
             x: count,
-            y: mockData,
+            y: spiralArray,
             type: 'scatter',
             mode: 'lines+markers',
             marker: {color: 'blue'},
-          },
+          }
         ]}
-        layout={ {width: 720, height: 340, title: 'IMU Temperature'} }
+        layout={ {width: 720, height: 340, title: 'IMU Temperature',  
+    yaxis: {
+    title: {
+      text: 'temp in celsius',
+      font: {
+        family: 'Courier New, monospace',
+        size: 18,
+        color: '#7f7f7f'
+      }
+    }
+  },
+      xaxis: {
+      title: {
+      text: 'time',
+      font: {
+        family: 'Courier New, monospace',
+        size: 18,
+        color: '#7f7f7f'
+      }
+    },
+  }  }}
       />
-      <Button className="mock-data-button" onClick={generateData}> Generate Data</Button>
       </>
        )
 }
