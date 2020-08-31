@@ -29,7 +29,7 @@ function App() {
     try {
       const device = await navigator.bluetooth.requestDevice({
         acceptAllDevices: true,
-        optionalServices: [],
+        optionalServices: [spiralService],
       });
       bluetoothDevice = device;
       const server = await device.gatt.connect();
