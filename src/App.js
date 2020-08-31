@@ -3,6 +3,9 @@ import './App.css';
 import SpiralLogo from "./spiral_logo.svg";
 import BluetoothLogo from "./Bluetooth.svg"
 import {Button, Navbar, Form} from "react-bootstrap"
+import Plot from 'react-plotly.js';
+
+let c = 0;
 
 let bluetoothDevice;
 const spiralService = '6e400001-b5a3-f393-e0a9-e50e24dcca9e';
@@ -11,8 +14,10 @@ const spiralRxCharacteristic = '6e400003-b5a3-f393-e0a9-e50e24dcca9e';
 
 function App() {
 
-    const [spiralData, setData] = useState(null)
-    const [bluetoothOn, setBluetooth] = useState(Boolean) 
+      const [spiralData, setData] = useState([])
+      const [bluetoothOn, setBluetooth] = useState(Boolean) 
+      const [mockData, setMockData] = useState([]);
+      const [count, setCount] = useState([]);
 
         const connectBLE = async () => {
           try {
@@ -52,7 +57,20 @@ function App() {
           }
           setBluetooth(false);
        }
-        console.log(bluetoothOn)
+     
+     const generateData = () => {
+        for(let i = mockData.length; i < 10; i++) {
+          const randomNum = [...mockData, Math.random()]
+          const countNum = [...count, c]
+          setMockData(randomNum)
+          setCount(countNum)
+        }
+          console.log(count)
+          c++;
+          count.shift();
+          mockData.shift();
+     }   
+
 if(!bluetoothOn) {
   return (
     <div className="App">
@@ -79,6 +97,7 @@ if(!bluetoothOn) {
 }  
 else {
   return(
+    <>
     <Navbar bg="dark" variant="dark" className="justify-content-between">
      <Navbar.Brand>
        <img
@@ -94,6 +113,21 @@ else {
      <Button onClick={disconnectDevice}>disconnect</Button> 
      </Form>
      </Navbar>
+     
+     <Plot
+        data={[
+          {
+            x: count,
+            y: mockData,
+            type: 'scatter',
+            mode: 'lines+markers',
+            marker: {color: 'blue'},
+          },
+        ]}
+        layout={ {width: 720, height: 340, title: 'IMU Temperature'} }
+      />
+      <Button className="mock-data-button" onClick={generateData}> Generate Data</Button>
+      </>
        )
 }
       
