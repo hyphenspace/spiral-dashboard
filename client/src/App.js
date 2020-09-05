@@ -11,6 +11,10 @@ const spiralService = '6e400001-b5a3-f393-e0a9-e50e24dcca9e';
 const spiralRxCharacteristic = '6e400003-b5a3-f393-e0a9-e50e24dcca9e';
 
 function App() {
+  const [YawData, setYaw] = useState([]);
+  const [RollData, setRoll] = useState([]);
+  const [PitchData, setPitch] = useState([]);
+  const [TempData, setTemp] = useState([]);
   const [spiralArray, setArray] = useState([]);
   const [spiralData, setData] = useState(0);
   const [isBluetoothOn, setBluetooth] = useState(Boolean);
@@ -21,7 +25,7 @@ function App() {
       if (isBluetoothOn === true) {
         generateData();
       }
-    }, 3000); // clearing interval
+    }, 100); // clearing interval
     return () => clearInterval(timer);
   });
 
@@ -58,7 +62,14 @@ function App() {
     for (let i = 0; i < value.byteLength; i++) {
       result += String.fromCharCode(value.getUint8(i));
     }
+    
+    if (result[0] === "H") {
+      let a = result.split("Hello: ");
+      console.log(parseInt(a[1]));
+    }
+
     setData(parseInt(result));
+
   };
 
   const disconnectDevice = () => {
@@ -75,16 +86,17 @@ function App() {
       setArray(randomNum);
       setCount(countNum);
     }
-    console.log(spiralArray);
-    console.log(count);
+    //console.log(spiralArray);
+    //console.log(count);
     c++;
     count.shift();
     spiralArray.shift();
   };
 
+
   if (!isBluetoothOn) {
     return (
-      <div className="App">
+      <div className="container">
         <div className="connect-container">
           <img
             src={BluetoothLogo}
@@ -136,6 +148,8 @@ function App() {
             <Button onClick={disconnectDevice}>disconnect</Button>
           </Form>
         </Navbar>
+        
+   <div className="plot-section">
 
         <Plot
           data={[
@@ -163,7 +177,7 @@ function App() {
             },
             xaxis: {
               title: {
-                text: 'time',
+                text: 'timestep',
                 font: {
                   family: 'Courier New, monospace',
                   size: 18,
@@ -173,6 +187,123 @@ function App() {
             },
           }}
         />
+
+
+        <Plot
+          data={[
+            {
+              x: count,
+              y: spiralArray,
+              type: 'scatter',
+              mode: 'lines+markers',
+              marker: { color: 'yellow' },
+            },
+          ]}
+          layout={{
+            width: 720,
+            height: 340,
+            title: 'IMU Pitch',
+            yaxis: {
+              title: {
+                text: 'pitch',
+                font: {
+                  family: 'Courier New, monospace',
+                  size: 18,
+                  color: '#7f7f7f',
+                },
+              },
+            },
+            xaxis: {
+              title: {
+                text: 'timestep',
+                font: {
+                  family: 'Courier New, monospace',
+                  size: 18,
+                  color: '#7f7f7f',
+                },
+              },
+            },
+          }}
+        />
+  </div>
+
+ <div className="plot-section">
+        <Plot
+          data={[
+            {
+              x: count,
+              y: spiralArray,
+              type: 'scatter',
+              mode: 'lines+markers',
+              marker: { color: 'red' },
+            },
+          ]}
+          layout={{
+            width: 720,
+            height: 340,
+            title: 'IMU Yaw',
+            yaxis: {
+              title: {
+                text: 'yaw',
+                font: {
+                  family: 'Courier New, monospace',
+                  size: 18,
+                  color: '#7f7f7f',
+                },
+              },
+            },
+            xaxis: {
+              title: {
+                text: 'timestep',
+                font: {
+                  family: 'Courier New, monospace',
+                  size: 18,
+                  color: '#7f7f7f',
+                },
+              },
+            },
+          }}
+        />
+      
+        <Plot
+          data={[
+            {
+              x: count,
+              y: spiralArray,
+              type: 'scatter',
+              mode: 'lines+markers',
+              marker: { color: 'violet' },
+            },
+          ]}
+          layout={{
+            width: 720,
+            height: 340,
+            title: 'IMU Roll',
+            yaxis: {
+              title: {
+                text: 'roll',
+                font: {
+                  family: 'Courier New, monospace',
+                  size: 18,
+                  color: '#7f7f7f',
+                },
+              },
+            },
+            xaxis: {
+              title: {
+                text: 'timestep',
+                font: {
+                  family: 'Courier New, monospace',
+                  size: 18,
+                  color: '#7f7f7f',
+                },
+              },
+            },
+          }}
+        />
+         
+        </div>
+
       </>
     );
   }
