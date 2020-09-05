@@ -8,7 +8,7 @@ A PWA for displaying temperature and orientation data from [spiral]().
 Spiral Dashboard was designed with [React](https://reactjs.org/) and styled with [react-bootstrap](https://github.com/react-bootstrap/react-bootstrap).
 The goal was to build a simple solution to stream realtime data from spiral's on board IMU and display it graphically. 
 
-<p align="center"><img src="https://i.imgur.com/Q8zcsQu.png" width="1000px" height="500px"/></p>
+<p align="center"><img src="https://i.imgur.com/Q8zcsQu.png" width="100%"/></p>
 
 
 ## Features ✨
