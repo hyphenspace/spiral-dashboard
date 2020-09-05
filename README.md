@@ -9,3 +9,12 @@ Spiral Dashboard was designed with [React](https://reactjs.org/) and styled with
 The goal was to build a simple solution to stream realtime data from spiral's on board IMU and display it graphically. 
 
 <p align="center"><img src="https://i.imgur.com/Q8zcsQu.png" width="1000px" height="500px"/></p>
+
+
+## Features ✨
+
+❤️ **Lightweight**: Crafted with minimalistic UI design.
+
+⚡️ **Fast**: Send requests and get/copy responses in real-time.
+
+🔥 **PWA**: Install as a [PWA](https://developers.google.com/web/progressive-web-apps) on your device.
