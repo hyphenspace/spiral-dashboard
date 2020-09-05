@@ -11,8 +11,14 @@ const spiralService = '6e400001-b5a3-f393-e0a9-e50e24dcca9e';
 const spiralRxCharacteristic = '6e400003-b5a3-f393-e0a9-e50e24dcca9e';
 
 function App() {
-  const [spiralArray, setArray] = useState([]);
-  const [spiralData, setData] = useState(0);
+  const [YawArray, setYawArray] = useState([]);
+  const [YawData, setYaw] = useState(0);
+  const [RollArray, setRollArray] = useState([]);
+  const [RollData, setRoll] = useState(0);
+  const [PitchArray, setPitchArray] = useState([]);
+  const [PitchData, setPitch] = useState(0);
+  const [TempArray, setTempArray] = useState([]);
+  const [TempData, setTemp] = useState(0);
   const [isBluetoothOn, setBluetooth] = useState(Boolean);
   const [count, setCount] = useState([]);
 
@@ -21,7 +27,7 @@ function App() {
       if (isBluetoothOn === true) {
         generateData();
       }
-    }, 3000); // clearing interval
+    }, 100); // clearing interval
     return () => clearInterval(timer);
   });
 
@@ -58,7 +64,23 @@ function App() {
     for (let i = 0; i < value.byteLength; i++) {
       result += String.fromCharCode(value.getUint8(i));
     }
-    setData(parseInt(result));
+
+    if (result[0] === 'T') {
+      let temperature = result.split('T');
+      setTemp(parseInt(temperature[1]));
+    }
+    if (result[0] === 'P') {
+      let pitch = result.split('P');
+      setPitch(parseInt(pitch[1]));
+    }
+    if (result[0] === 'Y') {
+      let yaw = result.split('Y');
+      setYaw(parseInt(yaw[1]));
+    }
+    if (result[0] === 'R') {
+      let roll = result.split('R');
+      setRoll(parseInt(roll[1]));
+    }
   };
 
   const disconnectDevice = () => {
@@ -69,22 +91,31 @@ function App() {
   };
 
   const generateData = () => {
-    for (let i = spiralArray.length; i < 10; i++) {
-      const randomNum = [...spiralArray, spiralData];
+    for (let i = count.length; i < 10; i++) {
+      const tempNum = [...TempArray, TempData];
+      const pitchNum = [...PitchArray, PitchData];
+      const yawNum = [...YawArray, YawData];
+      const rollNum = [...RollArray, RollData];
       const countNum = [...count, c];
-      setArray(randomNum);
+      setTempArray(tempNum);
+      setPitchArray(pitchNum);
+      setYawArray(yawNum);
+      setRollArray(rollNum);
       setCount(countNum);
+      console.log(rollNum);
     }
-    console.log(spiralArray);
-    console.log(count);
-    c++;
+
+    TempArray.shift();
+    PitchArray.shift();
+    YawArray.shift();
+    RollArray.shift();
     count.shift();
-    spiralArray.shift();
+    c++;
   };
 
   if (!isBluetoothOn) {
     return (
-      <div className="App">
+      <div className="container">
         <div className="connect-container">
           <img
             src={BluetoothLogo}
@@ -137,42 +168,157 @@ function App() {
           </Form>
         </Navbar>
 
-        <Plot
-          data={[
-            {
-              x: count,
-              y: spiralArray,
-              type: 'scatter',
-              mode: 'lines+markers',
-              marker: { color: 'blue' },
-            },
-          ]}
-          layout={{
-            width: 720,
-            height: 340,
-            title: 'IMU Temperature',
-            yaxis: {
-              title: {
-                text: 'temp in celsius',
-                font: {
-                  family: 'Courier New, monospace',
-                  size: 18,
-                  color: '#7f7f7f',
+        <div className="plot-section">
+          <Plot
+            data={[
+              {
+                x: count,
+                y: TempArray,
+                type: 'scatter',
+                mode: 'lines+markers',
+                marker: { color: 'blue' },
+              },
+            ]}
+            layout={{
+              width: 720,
+              height: 340,
+              title: 'IMU Temperature',
+              yaxis: {
+                title: {
+                  text: 'temp in celsius',
+                  font: {
+                    family: 'Courier New, monospace',
+                    size: 18,
+                    color: '#7f7f7f',
+                  },
                 },
               },
-            },
-            xaxis: {
-              title: {
-                text: 'time',
-                font: {
-                  family: 'Courier New, monospace',
-                  size: 18,
-                  color: '#7f7f7f',
+              xaxis: {
+                title: {
+                  text: 'timestep',
+                  font: {
+                    family: 'Courier New, monospace',
+                    size: 18,
+                    color: '#7f7f7f',
+                  },
                 },
               },
-            },
-          }}
-        />
+            }}
+          />
+
+          <Plot
+            data={[
+              {
+                x: count,
+                y: PitchArray,
+                type: 'scatter',
+                mode: 'lines+markers',
+                marker: { color: 'yellow' },
+              },
+            ]}
+            layout={{
+              width: 720,
+              height: 340,
+              title: 'IMU Pitch',
+              yaxis: {
+                title: {
+                  text: 'pitch',
+                  font: {
+                    family: 'Courier New, monospace',
+                    size: 18,
+                    color: '#7f7f7f',
+                  },
+                },
+              },
+              xaxis: {
+                title: {
+                  text: 'timestep',
+                  font: {
+                    family: 'Courier New, monospace',
+                    size: 18,
+                    color: '#7f7f7f',
+                  },
+                },
+              },
+            }}
+          />
+        </div>
+
+        <div className="plot-section">
+          <Plot
+            data={[
+              {
+                x: count,
+                y: YawArray,
+                type: 'scatter',
+                mode: 'lines+markers',
+                marker: { color: 'red' },
+              },
+            ]}
+            layout={{
+              width: 720,
+              height: 340,
+              title: 'IMU Yaw',
+              yaxis: {
+                title: {
+                  text: 'yaw',
+                  font: {
+                    family: 'Courier New, monospace',
+                    size: 18,
+                    color: '#7f7f7f',
+                  },
+                },
+              },
+              xaxis: {
+                title: {
+                  text: 'timestep',
+                  font: {
+                    family: 'Courier New, monospace',
+                    size: 18,
+                    color: '#7f7f7f',
+                  },
+                },
+              },
+            }}
+          />
+
+          <Plot
+            data={[
+              {
+                x: count,
+                y: RollArray,
+                type: 'scatter',
+                mode: 'lines+markers',
+                marker: { color: 'violet' },
+              },
+            ]}
+            layout={{
+              width: 720,
+              height: 340,
+              title: 'IMU Roll',
+              yaxis: {
+                title: {
+                  text: 'roll',
+                  font: {
+                    family: 'Courier New, monospace',
+                    size: 18,
+                    color: '#7f7f7f',
+                  },
+                },
+              },
+              xaxis: {
+                title: {
+                  text: 'timestep',
+                  font: {
+                    family: 'Courier New, monospace',
+                    size: 18,
+                    color: '#7f7f7f',
+                  },
+                },
+              },
+            }}
+          />
+        </div>
       </>
     );
   }
