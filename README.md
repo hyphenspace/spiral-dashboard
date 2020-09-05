@@ -15,6 +15,6 @@ The goal was to build a simple solution to stream realtime data from spiral's on
 
 ❤️ **Lightweight**: Crafted with minimalistic UI design.
 
-⚡️ **Fast**: Send requests and get/copy responses in real-time.
+⚡️ **Fast**: Displays IMU data in real-time.
 
 🔥 **PWA**: Install as a [PWA](https://developers.google.com/web/progressive-web-apps) on your device.
