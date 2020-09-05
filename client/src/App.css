@@ -70,11 +70,10 @@
 }
 
 @media only screen and (max-width: 992px) {
-.plot-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  .plot-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
 }
-}
-

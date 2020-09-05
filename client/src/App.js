@@ -65,20 +65,20 @@ function App() {
       result += String.fromCharCode(value.getUint8(i));
     }
 
-    if (result[0] === "T") {
-      let temperature = result.split("T");
+    if (result[0] === 'T') {
+      let temperature = result.split('T');
       setTemp(parseInt(temperature[1]));
     }
-    if (result[0] === "P") {
-      let pitch = result.split("P");
+    if (result[0] === 'P') {
+      let pitch = result.split('P');
       setPitch(parseInt(pitch[1]));
     }
-    if (result[0] === "Y") {
-      let yaw = result.split("Y");
+    if (result[0] === 'Y') {
+      let yaw = result.split('Y');
       setYaw(parseInt(yaw[1]));
     }
-    if (result[0] === "R") {
-      let roll = result.split("R");
+    if (result[0] === 'R') {
+      let roll = result.split('R');
       setRoll(parseInt(roll[1]));
     }
   };
@@ -112,7 +112,6 @@ function App() {
     count.shift();
     c++;
   };
-
 
   if (!isBluetoothOn) {
     return (
@@ -168,162 +167,158 @@ function App() {
             <Button onClick={disconnectDevice}>disconnect</Button>
           </Form>
         </Navbar>
-        
-   <div className="plot-section">
 
-        <Plot
-          data={[
-            {
-              x: count,
-              y: TempArray,
-              type: 'scatter',
-              mode: 'lines+markers',
-              marker: { color: 'blue' },
-            },
-          ]}
-          layout={{
-            width: 720,
-            height: 340,
-            title: 'IMU Temperature',
-            yaxis: {
-              title: {
-                text: 'temp in celsius',
-                font: {
-                  family: 'Courier New, monospace',
-                  size: 18,
-                  color: '#7f7f7f',
+        <div className="plot-section">
+          <Plot
+            data={[
+              {
+                x: count,
+                y: TempArray,
+                type: 'scatter',
+                mode: 'lines+markers',
+                marker: { color: 'blue' },
+              },
+            ]}
+            layout={{
+              width: 720,
+              height: 340,
+              title: 'IMU Temperature',
+              yaxis: {
+                title: {
+                  text: 'temp in celsius',
+                  font: {
+                    family: 'Courier New, monospace',
+                    size: 18,
+                    color: '#7f7f7f',
+                  },
                 },
               },
-            },
-            xaxis: {
-              title: {
-                text: 'timestep',
-                font: {
-                  family: 'Courier New, monospace',
-                  size: 18,
-                  color: '#7f7f7f',
+              xaxis: {
+                title: {
+                  text: 'timestep',
+                  font: {
+                    family: 'Courier New, monospace',
+                    size: 18,
+                    color: '#7f7f7f',
+                  },
                 },
               },
-            },
-          }}
-        />
+            }}
+          />
 
-
-        <Plot
-          data={[
-            {
-              x: count,
-              y: PitchArray,
-              type: 'scatter',
-              mode: 'lines+markers',
-              marker: { color: 'yellow' },
-            },
-          ]}
-          layout={{
-            width: 720,
-            height: 340,
-            title: 'IMU Pitch',
-            yaxis: {
-              title: {
-                text: 'pitch',
-                font: {
-                  family: 'Courier New, monospace',
-                  size: 18,
-                  color: '#7f7f7f',
+          <Plot
+            data={[
+              {
+                x: count,
+                y: PitchArray,
+                type: 'scatter',
+                mode: 'lines+markers',
+                marker: { color: 'yellow' },
+              },
+            ]}
+            layout={{
+              width: 720,
+              height: 340,
+              title: 'IMU Pitch',
+              yaxis: {
+                title: {
+                  text: 'pitch',
+                  font: {
+                    family: 'Courier New, monospace',
+                    size: 18,
+                    color: '#7f7f7f',
+                  },
                 },
               },
-            },
-            xaxis: {
-              title: {
-                text: 'timestep',
-                font: {
-                  family: 'Courier New, monospace',
-                  size: 18,
-                  color: '#7f7f7f',
+              xaxis: {
+                title: {
+                  text: 'timestep',
+                  font: {
+                    family: 'Courier New, monospace',
+                    size: 18,
+                    color: '#7f7f7f',
+                  },
                 },
               },
-            },
-          }}
-        />
-  </div>
-
- <div className="plot-section">
-        <Plot
-          data={[
-            {
-              x: count,
-              y: YawArray,
-              type: 'scatter',
-              mode: 'lines+markers',
-              marker: { color: 'red' },
-            },
-          ]}
-          layout={{
-            width: 720,
-            height: 340,
-            title: 'IMU Yaw',
-            yaxis: {
-              title: {
-                text: 'yaw',
-                font: {
-                  family: 'Courier New, monospace',
-                  size: 18,
-                  color: '#7f7f7f',
-                },
-              },
-            },
-            xaxis: {
-              title: {
-                text: 'timestep',
-                font: {
-                  family: 'Courier New, monospace',
-                  size: 18,
-                  color: '#7f7f7f',
-                },
-              },
-            },
-          }}
-        />
-      
-        <Plot
-          data={[
-            {
-              x: count,
-              y: RollArray,
-              type: 'scatter',
-              mode: 'lines+markers',
-              marker: { color: 'violet' },
-            },
-          ]}
-          layout={{
-            width: 720,
-            height: 340,
-            title: 'IMU Roll',
-            yaxis: {
-              title: {
-                text: 'roll',
-                font: {
-                  family: 'Courier New, monospace',
-                  size: 18,
-                  color: '#7f7f7f',
-                },
-              },
-            },
-            xaxis: {
-              title: {
-                text: 'timestep',
-                font: {
-                  family: 'Courier New, monospace',
-                  size: 18,
-                  color: '#7f7f7f',
-                },
-              },
-            },
-          }}
-        />
-         
+            }}
+          />
         </div>
 
+        <div className="plot-section">
+          <Plot
+            data={[
+              {
+                x: count,
+                y: YawArray,
+                type: 'scatter',
+                mode: 'lines+markers',
+                marker: { color: 'red' },
+              },
+            ]}
+            layout={{
+              width: 720,
+              height: 340,
+              title: 'IMU Yaw',
+              yaxis: {
+                title: {
+                  text: 'yaw',
+                  font: {
+                    family: 'Courier New, monospace',
+                    size: 18,
+                    color: '#7f7f7f',
+                  },
+                },
+              },
+              xaxis: {
+                title: {
+                  text: 'timestep',
+                  font: {
+                    family: 'Courier New, monospace',
+                    size: 18,
+                    color: '#7f7f7f',
+                  },
+                },
+              },
+            }}
+          />
+
+          <Plot
+            data={[
+              {
+                x: count,
+                y: RollArray,
+                type: 'scatter',
+                mode: 'lines+markers',
+                marker: { color: 'violet' },
+              },
+            ]}
+            layout={{
+              width: 720,
+              height: 340,
+              title: 'IMU Roll',
+              yaxis: {
+                title: {
+                  text: 'roll',
+                  font: {
+                    family: 'Courier New, monospace',
+                    size: 18,
+                    color: '#7f7f7f',
+                  },
+                },
+              },
+              xaxis: {
+                title: {
+                  text: 'timestep',
+                  font: {
+                    family: 'Courier New, monospace',
+                    size: 18,
+                    color: '#7f7f7f',
+                  },
+                },
+              },
+            }}
+          />
+        </div>
       </>
     );
   }
